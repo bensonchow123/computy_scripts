@@ -12,8 +12,9 @@ load_dotenv()
 
 SPOTIFY_CLIENT_ID = getenv("SPOTIFY_CLIENT_ID")
 SPOTIFY_CLIENT_SECRET = getenv("SPOTIFY_CLIENT_SECRET")
-SPOTIPY_REDIRECT_URI = 'http://127.0.0.1:8888/callback'
 M3U_FOLDER_PATH = getenv("LINUX_PLAYLISTS_FOLDER_PATH")
+SPOTIFY_AUTH_CACHE_PATH = getenv("SPOTIFY_AUTH_CACHE_PATH")
+SPOTIPY_REDIRECT_URI = 'http://127.0.0.1:8888/callback'
 SCOPE = "playlist-modify-public playlist-read-private"
 
 sp = Spotify(auth_manager=SpotifyOAuth(
@@ -21,7 +22,8 @@ sp = Spotify(auth_manager=SpotifyOAuth(
     client_secret=SPOTIFY_CLIENT_SECRET,
     redirect_uri=SPOTIPY_REDIRECT_URI,
     scope=SCOPE,
-    open_browser=True
+    open_browser=True,
+    cache_path=SPOTIFY_AUTH_CACHE_PATH
 ))
 
 def format_playlist_name(filename):
@@ -100,10 +102,11 @@ def remove_all_tracks(playlist_id, uris):
 
 def update_playlist(name, track_uris):
     playlist = get_playlist_by_name(name)
-    sync_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    sync_time = datetime.now().strftime("%-d/%-m/%y, %H:%M")
     playlist_description = (
         f"Synced from my Jellyfin server at {sync_time}, tracks can be wrong. "
-        "Using my custom M3U → Spotify sync tool, see at: github.com/bensonchow123/computy_scripts"
+        "Using my custom M3U → Spotify sync tool, see at: github.com/bensonchow123/computy_scripts. "
+        "Ordered in order of my favourites."
     )
 
     if playlist:
