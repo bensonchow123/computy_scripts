@@ -40,7 +40,42 @@ def get_metadata(file_path):
         elif artist and title:
             return f"{artist} - {title}"
     except Exception as e:
-        print(f"Metadata error for {file_path}: {e}")
+        print(f"Metadata error fo
+def convert_line(line):
+    # Replace forward slashes with backslashes for Windows paths
+    return line.replace('/', '\\')
+
+def convert_m3u_file(input_path, output_path):
+    with open(input_path, 'r', encoding='utf-8') as infile, \
+         open(output_path, 'w', encoding='utf-8') as outfile:
+        for line in infile:
+            if line.strip() and not line.startswith('#'):
+                outfile.write(convert_line(line))
+            else:
+                outfile.write(line)
+
+def main():
+    if len(sys.argv) < 2:
+        print("Usage: python linux_m3u_to_windows.py <m3u_file_or_folder>")
+        sys.exit(1)
+
+    target = sys.argv[1]
+    if os.path.isdir(target):
+        for filename in os.listdir(target):
+            if filename.lower().endswith('.m3u'):
+                input_path = os.path.join(target, filename)
+                output_path = os.path.join(target, f"{os.path.splitext(filename)[0]}_win.m3u")
+                convert_m3u_file(input_path, output_path)
+                print(f"Converted: {input_path} -> {output_path}")
+    elif os.path.isfile(target) and target.lower().endswith('.m3u'):
+        output_path = f"{os.path.splitext(target)[0]}_win.m3u"
+        convert_m3u_file(target, output_path)
+        print(f"Converted: {target} -> {output_path}")
+    else:
+        print("No valid .m3u file or folder found.")
+
+if __name__ == "__main__":
+    main()r {file_path}: {e}")
     return None
 
 def read_m3u(file_path):
@@ -102,9 +137,9 @@ def remove_all_tracks(playlist_id, uris):
 
 def update_playlist(name, track_uris):
     playlist = get_playlist_by_name(name)
-    sync_time = datetime.now().strftime("%-d/%-m/%y, %H:%M")
+    sync_time = datetime.now().strftime("%-d/%-m at %H:%M")
     playlist_description = (
-        f"Synced from my Jellyfin server at {sync_time}, tracks can be wrong. "
+        f"Synced from my Jellyfin server on {sync_time}, tracks can be wrong. "
         "Using my custom M3U → Spotify sync tool, see at: github.com/bensonchow123/computy_scripts. "
         "Ordered in order of my favourites."
     )
