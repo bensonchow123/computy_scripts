@@ -1,6 +1,6 @@
 # Computy Scripts
 
-Scripts running via cron jobs on my PI 5 NAS/ Server
+Scripts running via cron jobs or useful scripts for my PI 5 NAS/ Server
 
 ## Usage
 

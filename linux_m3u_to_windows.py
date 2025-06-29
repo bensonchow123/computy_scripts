@@ -9,7 +9,7 @@ WINDOWS_PLAYLISTS_FOLDER_PATH = os.getenv("WINDOWS_PLAYLISTS_FOLDER_PATH")
 
 def convert_line(line):
     if line.strip() and not line.startswith('#'):
-        line = line.replace('/media/benson/SSD_960GB/music/library/', r'Z:\music\library\\')
+        line = line.replace('/mnt/SSD_960GB/music/library/', r'Z:\music\library\\')
         return line.replace('/', '\\')
     return line
 
